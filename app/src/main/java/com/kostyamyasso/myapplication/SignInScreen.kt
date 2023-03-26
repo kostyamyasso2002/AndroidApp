@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -12,9 +13,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
@@ -25,32 +26,26 @@ fun SignInScreen() {
     }
 }
 
-
-@Preview(showBackground = true)
 @Composable
-fun NewAccView() {
-    var userName by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var keepSignedIn by remember { mutableStateOf(true) }
-    var emailAboutPricing by remember { mutableStateOf(true) }
+fun NewAccView(signInScreenViewModel: SignInScreenViewModel = viewModel()) {
+    val state by signInScreenViewModel.viewState.observeAsState()
+    val viewState = state ?: throw Exception("Unreachable")
 
     Box(modifier = Modifier.padding(20.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(text = "Sign up for free", fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
-                value = userName,
-                onValueChange = { userName = it },
+                value = viewState.userName,
+                onValueChange = { signInScreenViewModel.obtainEvent(SignInEvent.ChangeName(it)) },
                 placeholder = { Text(text = "uzumaki_naruto") },
                 label = { Text(text = "Username") },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = viewState.email,
+                onValueChange = { signInScreenViewModel.obtainEvent(SignInEvent.ChangeEmail(it)) },
                 placeholder = { Text(text = "user@gmail.com") },
                 label = { Text(text = "Email") },
                 shape = RoundedCornerShape(12.dp),
@@ -58,12 +53,12 @@ fun NewAccView() {
             )
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = viewState.password,
+                onValueChange = { signInScreenViewModel.obtainEvent(SignInEvent.ChangePassword(it)) },
                 label = { Text(text = "Password") },
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (viewState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    Button(onClick = { passwordVisible = !passwordVisible }) {
+                    Button(onClick = { signInScreenViewModel.obtainEvent(SignInEvent.ChangePasswordVisibility) }) {
                         Text(text = "Hide")
                     }
                 },
@@ -77,13 +72,15 @@ fun NewAccView() {
             ) {
                 Column(horizontalAlignment = Alignment.Start) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(checked = keepSignedIn, onCheckedChange = { keepSignedIn = it })
+                        Checkbox(
+                            checked = viewState.keepSignedIn,
+                            onCheckedChange = { signInScreenViewModel.obtainEvent(SignInEvent.ChangeKeepSignedIn) })
                         Text(text = "Keep Me Signed In")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
-                            checked = emailAboutPricing,
-                            onCheckedChange = { emailAboutPricing = it })
+                            checked = viewState.emailAboutPricing,
+                            onCheckedChange = { signInScreenViewModel.obtainEvent(SignInEvent.ChangeEmailAboutPricing) })
                         Text(text = "Email Me About Special Pricing")
                     }
                 }
@@ -94,7 +91,7 @@ fun NewAccView() {
             Box(modifier = Modifier.padding(paddingValues = PaddingValues(bottom = 20.dp))) {
                 Button(
                     onClick = {
-                        if (email.isNotBlank() && password.isNotBlank()) {
+                        if (viewState.email.isNotBlank() && viewState.password.isNotBlank()) {
                             //TODO check
                         } else {
                             Toast.makeText(
