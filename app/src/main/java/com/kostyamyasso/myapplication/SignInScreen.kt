@@ -29,7 +29,7 @@ fun SignInScreen() {
 @Composable
 fun NewAccView(signInScreenViewModel: SignInScreenViewModel = viewModel()) {
     val state by signInScreenViewModel.viewState.observeAsState()
-    val viewState = state ?: throw Exception("Unreachable")
+    val viewState = state ?: return
 
     Box(modifier = Modifier.padding(20.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
