@@ -7,8 +7,9 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,29 +17,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun SignInScreen() {
+fun SignInScreen(loginViewModel: SignInScreenViewModel = viewModel()) {
+    val viewState by loginViewModel.viewState.collectAsState()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Logo()
         Spacer(modifier = Modifier.height(30.dp))
-        LoginView()
+        LoginView(viewState) {
+            loginViewModel.obtainEvent(it)
+        }
     }
 }
 
-
-@Preview(showBackground = true)
 @Composable
-fun LoginView(loginViewModel: SignInScreenViewModel = viewModel()) {
-    val state by loginViewModel.viewState.observeAsState()
-    val viewState = state ?: return
-
-
+fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Login to your account", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -46,7 +43,7 @@ fun LoginView(loginViewModel: SignInScreenViewModel = viewModel()) {
 
         OutlinedTextField(
             value = viewState.email,
-            onValueChange = { loginViewModel.obtainEvent(SignInEvent.ChangeEmail(it)) },
+            onValueChange = { obtainEvent(SignInEvent.ChangeEmail(it)) },
             placeholder = { Text(text = "user@gmail.com") },
             label = { Text(text = "Email") },
             shape = RoundedCornerShape(12.dp)
@@ -54,11 +51,11 @@ fun LoginView(loginViewModel: SignInScreenViewModel = viewModel()) {
 
         OutlinedTextField(
             value = viewState.password,
-            onValueChange = { loginViewModel.obtainEvent(SignInEvent.ChangePassword(it)) },
+            onValueChange = { obtainEvent(SignInEvent.ChangePassword(it)) },
             label = { Text(text = "Password") },
             visualTransformation = if (viewState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
-                Button(onClick = { loginViewModel.obtainEvent(SignInEvent.ChangePasswordVisibility) }) {
+                Button(onClick = { obtainEvent(SignInEvent.ChangePasswordVisibility) }) {
                     Text(text = "Hide")
                 }
             },
@@ -89,5 +86,4 @@ fun LoginView(loginViewModel: SignInScreenViewModel = viewModel()) {
             }
         }
     }
-
 }
