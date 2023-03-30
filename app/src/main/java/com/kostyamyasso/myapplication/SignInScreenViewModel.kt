@@ -11,12 +11,9 @@ sealed class SignInEvent {
 }
 
 data class SignInState(
-    var userName: String = "",
     var email: String = "",
     var password: String = "",
-    var passwordVisible: Boolean = false,
-    var keepSignedIn: Boolean = true,
-    var emailAboutPricing: Boolean = true
+    var passwordVisible: Boolean = false
 )
 
 class SignInScreenViewModel : ViewModel() {
