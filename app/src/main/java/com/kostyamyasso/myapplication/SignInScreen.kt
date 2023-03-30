@@ -17,19 +17,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun SignInScreen(loginViewModel: SignInScreenViewModel = viewModel()) {
-    val viewState by loginViewModel.viewState.collectAsState()
+fun SignInScreen(signInScreenViewModel: SignInScreenViewModel = viewModel()) {
+    val viewState by signInScreenViewModel.viewState.collectAsState()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Logo()
         Spacer(modifier = Modifier.height(30.dp))
         LoginView(viewState) {
-            loginViewModel.obtainEvent(it)
+            signInScreenViewModel.obtainEvent(it)
         }
     }
 }
@@ -86,4 +87,10 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun LoginPreview() {
+    LoginView(viewState = SignInState(), obtainEvent = {})
 }

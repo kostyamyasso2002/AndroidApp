@@ -119,9 +119,11 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun NewAccPreview() = AndroidAppTheme {
     NewAccView(viewState = SignUpState(), obtainEvent = {})
 }
+
+
 
