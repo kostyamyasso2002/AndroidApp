@@ -4,8 +4,9 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,23 +14,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kostyamyasso.myapplication.ui.theme.AndroidAppTheme
 
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
+    val viewState by signUpScreenViewModel.viewState.collectAsState()
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Logo()
-        NewAccView()
+        NewAccView(viewState) {
+            signUpScreenViewModel.obtainEvent(it)
+        }
     }
 }
 
 @Composable
-fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
-    val state by signUpScreenViewModel.viewState.observeAsState()
-    val viewState = state ?: return
+fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
 
     Box(modifier = Modifier.padding(20.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -37,7 +42,7 @@ fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = viewState.userName,
-                onValueChange = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangeName(it)) },
+                onValueChange = { obtainEvent(SignUpEvent.ChangeName(it)) },
                 placeholder = { Text(text = "uzumaki_naruto") },
                 label = { Text(text = "Username") },
                 shape = RoundedCornerShape(12.dp),
@@ -45,7 +50,7 @@ fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
             )
             OutlinedTextField(
                 value = viewState.email,
-                onValueChange = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangeEmail(it)) },
+                onValueChange = { obtainEvent(SignUpEvent.ChangeEmail(it)) },
                 placeholder = { Text(text = "user@gmail.com") },
                 label = { Text(text = "Email") },
                 shape = RoundedCornerShape(12.dp),
@@ -54,11 +59,11 @@ fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
 
             OutlinedTextField(
                 value = viewState.password,
-                onValueChange = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangePassword(it)) },
+                onValueChange = { obtainEvent(SignUpEvent.ChangePassword(it)) },
                 label = { Text(text = "Password") },
                 visualTransformation = if (viewState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    Button(onClick = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangePasswordVisibility) }) {
+                    Button(onClick = { obtainEvent(SignUpEvent.ChangePasswordVisibility) }) {
                         Text(text = "Hide")
                     }
                 },
@@ -74,13 +79,13 @@ fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = viewState.keepSignedIn,
-                            onCheckedChange = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangeKeepSignedIn) })
+                            onCheckedChange = { obtainEvent(SignUpEvent.ChangeKeepSignedIn) })
                         Text(text = "Keep Me Signed In")
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = viewState.emailAboutPricing,
-                            onCheckedChange = { signUpScreenViewModel.obtainEvent(SignUpEvent.ChangeEmailAboutPricing) })
+                            onCheckedChange = { obtainEvent(SignUpEvent.ChangeEmailAboutPricing) })
                         Text(text = "Email Me About Special Pricing")
                     }
                 }
@@ -113,3 +118,10 @@ fun NewAccView(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
         }
     }
 }
+
+@Preview
+@Composable
+fun NewAccPreview() = AndroidAppTheme {
+    NewAccView(viewState = SignUpState(), obtainEvent = {})
+}
+

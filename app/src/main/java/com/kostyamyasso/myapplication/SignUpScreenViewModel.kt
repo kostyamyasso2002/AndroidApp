@@ -1,8 +1,8 @@
 package com.kostyamyasso.myapplication
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 sealed class SignUpEvent {
     data class ChangeName(val newName: String) : SignUpEvent()
@@ -23,34 +23,35 @@ data class SignUpState(
 )
 
 class SignUpScreenViewModel : ViewModel() {
-    private val _viewState: MutableLiveData<SignUpState> = MutableLiveData(SignUpState())
-    val viewState: LiveData<SignUpState> = _viewState
+    private val _viewState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
+    val viewState: StateFlow<SignUpState> = _viewState
 
     fun obtainEvent(event: SignUpEvent) {
         when (event) {
             is SignUpEvent.ChangeName -> {
-                _viewState.postValue(_viewState.value?.copy(userName = event.newName))
+                _viewState.value = _viewState.value.copy(userName = event.newName)
+
             }
             is SignUpEvent.ChangeEmail -> {
-                _viewState.postValue(_viewState.value?.copy(email = event.newEmail))
+                _viewState.value = _viewState.value.copy(email = event.newEmail)
 
             }
             is SignUpEvent.ChangePassword -> {
-                _viewState.postValue(_viewState.value?.copy(password = event.newPassword))
+                _viewState.value = _viewState.value.copy(password = event.newPassword)
 
             }
             SignUpEvent.ChangePasswordVisibility -> {
-                val prev = _viewState.value?.passwordVisible
-                _viewState.postValue(prev?.let { _viewState.value?.copy(passwordVisible = !it) })
+                val prev = _viewState.value.passwordVisible
+                _viewState.value = _viewState.value.copy(passwordVisible = !prev)
             }
             SignUpEvent.ChangeKeepSignedIn -> {
-                val prev = _viewState.value?.keepSignedIn
-                _viewState.postValue(prev?.let { _viewState.value?.copy(keepSignedIn = !it) })
+                val prev = _viewState.value.keepSignedIn
+                _viewState.value = _viewState.value.copy(keepSignedIn = !prev)
 
             }
             SignUpEvent.ChangeEmailAboutPricing -> {
-                val prev = _viewState.value?.emailAboutPricing
-                _viewState.postValue(prev?.let { _viewState.value?.copy(emailAboutPricing = !it) })
+                val prev = _viewState.value.emailAboutPricing
+                _viewState.value = _viewState.value.copy(emailAboutPricing = !prev)
             }
         }
     }
