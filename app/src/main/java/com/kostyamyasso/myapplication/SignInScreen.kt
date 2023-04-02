@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -39,31 +40,38 @@ fun SignInScreen(signInScreenViewModel: SignInScreenViewModel = viewModel()) {
 fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Login to your account", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = stringResource(R.string.login_text),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
         Spacer(modifier = Modifier.height(20.dp))
 
         OutlinedTextField(
             value = viewState.email,
             onValueChange = { obtainEvent(SignInEvent.ChangeEmail(it)) },
-            placeholder = { Text(text = "user@gmail.com") },
-            label = { Text(text = "Email") },
+            placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+            label = { Text(text = stringResource(R.string.email_label)) },
             shape = RoundedCornerShape(12.dp)
         )
 
         OutlinedTextField(
             value = viewState.password,
             onValueChange = { obtainEvent(SignInEvent.ChangePassword(it)) },
-            label = { Text(text = "Password") },
+            label = { Text(text = stringResource(R.string.password_label)) },
             visualTransformation = if (viewState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             trailingIcon = {
                 Button(onClick = { obtainEvent(SignInEvent.ChangePasswordVisibility) }) {
-                    Text(text = "Hide")
+                    Text(
+                        text = stringResource(if (viewState.passwordVisible) R.string.password_hide else R.string.password_show)
+                    )
                 }
             },
             shape = RoundedCornerShape(12.dp)
         )
         Spacer(modifier = Modifier.weight(0.1f))
         val context = LocalContext.current
+        val loginWarning = stringResource(R.string.login_warning)
         Box(modifier = Modifier.padding(40.dp)) {
             Button(
                 onClick = {
@@ -72,7 +80,7 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
                     } else {
                         Toast.makeText(
                             context,
-                            "Please enter email and password",
+                            loginWarning,
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -83,7 +91,11 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
                     .width(140.dp),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text(text = "Login", color = Color.White, fontSize = 18.sp)
+                Text(
+                    text = stringResource(R.string.login_button),
+                    color = Color.White,
+                    fontSize = 18.sp
+                )
             }
         }
     }

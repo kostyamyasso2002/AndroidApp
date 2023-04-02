@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Android app</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">user@gmail.com</string>
+    <string name="login_text">Login to your account</string>
+    <string name="password_label">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_warning">Please enter email and password</string>
+    <string name="password_hide">Hide</string>
+    <string name="password_show">Show</string>
+    <string name="sign_up_text">Sign up for free</string>
+    <string name="username_placeholder">uzumaki_naruto</string>
+    <string name="username_label">Username</string>
+    <string name="sign_up_button">Create account</string>
+    <string name="agreement_1">Keep Me Signed In</string>
+    <string name="agreement_2">Email Me About Special Pricing</string>
 </resources>

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,21 +39,25 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
 
     Box(modifier = Modifier.padding(20.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "Sign up for free", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(R.string.sign_up_text),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
             Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = viewState.userName,
                 onValueChange = { obtainEvent(SignUpEvent.ChangeName(it)) },
-                placeholder = { Text(text = "uzumaki_naruto") },
-                label = { Text(text = "Username") },
+                placeholder = { Text(text = stringResource(R.string.username_placeholder)) },
+                label = { Text(text = stringResource(R.string.username_label)) },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
             OutlinedTextField(
                 value = viewState.email,
                 onValueChange = { obtainEvent(SignUpEvent.ChangeEmail(it)) },
-                placeholder = { Text(text = "user@gmail.com") },
-                label = { Text(text = "Email") },
+                placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
+                label = { Text(text = stringResource(R.string.email_label)) },
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -60,11 +65,11 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
             OutlinedTextField(
                 value = viewState.password,
                 onValueChange = { obtainEvent(SignUpEvent.ChangePassword(it)) },
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(R.string.password_label)) },
                 visualTransformation = if (viewState.passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     Button(onClick = { obtainEvent(SignUpEvent.ChangePasswordVisibility) }) {
-                        Text(text = "Hide")
+                        Text(text = stringResource(if (viewState.passwordVisible) R.string.password_hide else R.string.password_show))
                     }
                 },
                 shape = RoundedCornerShape(12.dp),
@@ -80,19 +85,20 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
                         Checkbox(
                             checked = viewState.keepSignedIn,
                             onCheckedChange = { obtainEvent(SignUpEvent.ChangeKeepSignedIn) })
-                        Text(text = "Keep Me Signed In")
+                        Text(text = stringResource(R.string.agreement_1))
                     }
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Checkbox(
                             checked = viewState.emailAboutPricing,
                             onCheckedChange = { obtainEvent(SignUpEvent.ChangeEmailAboutPricing) })
-                        Text(text = "Email Me About Special Pricing")
+                        Text(text = stringResource(R.string.agreement_2))
                     }
                 }
             }
             Spacer(modifier = Modifier.weight(0.1f))
 
             val context = LocalContext.current
+            val warning = stringResource(R.string.login_warning)
             Box(modifier = Modifier.padding(paddingValues = PaddingValues(bottom = 20.dp))) {
                 Button(
                     onClick = {
@@ -101,7 +107,7 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
                         } else {
                             Toast.makeText(
                                 context,
-                                "Please enter email and password",
+                                warning,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -112,7 +118,7 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
                         .width(200.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
-                    Text(text = "Create account", color = Color.White, fontSize = 18.sp)
+                    Text(text = stringResource(R.string.sign_up_button), color = Color.White, fontSize = 18.sp)
                 }
             }
         }
