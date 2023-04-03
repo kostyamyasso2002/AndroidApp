@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
+import com.kostyamyasso.myapplication.sign_in.SignInScreen
 import com.kostyamyasso.myapplication.ui.theme.AndroidAppTheme
 
 class MainActivity : ComponentActivity() {

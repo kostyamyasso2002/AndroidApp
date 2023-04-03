@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication
+package com.kostyamyasso.myapplication.sign_in
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kostyamyasso.myapplication.Logo
+import com.kostyamyasso.myapplication.R
 
 
 @Composable

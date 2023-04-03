@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication
+package com.kostyamyasso.myapplication.sign_up
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -19,6 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kostyamyasso.myapplication.Logo
+import com.kostyamyasso.myapplication.R
 import com.kostyamyasso.myapplication.ui.theme.AndroidAppTheme
 
 

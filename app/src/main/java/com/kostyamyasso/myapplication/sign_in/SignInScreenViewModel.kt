@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication
+package com.kostyamyasso.myapplication.sign_in
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
