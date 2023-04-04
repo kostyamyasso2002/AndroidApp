@@ -1,8 +1,10 @@
 package com.kostyamyasso.myapplication.sign_up
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
 sealed class SignUpEvent {
     data class ChangeName(val newName: String) : SignUpEvent()
@@ -22,7 +24,8 @@ data class SignUpState(
     var emailAboutPricing: Boolean = true
 )
 
-class SignUpScreenViewModel : ViewModel() {
+@HiltViewModel
+class SignUpScreenViewModel @Inject constructor(): ViewModel() {
     private val _viewState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
     val viewState: StateFlow<SignUpState> = _viewState
 
