@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication.sign_up
+package com.kostyamyasso.myapplication.screen.sign_up
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

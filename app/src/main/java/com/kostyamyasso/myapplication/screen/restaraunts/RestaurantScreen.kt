@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication.restaraunts
+package com.kostyamyasso.myapplication.screen.restaraunts
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ fun RestaurantScreen(restaurantViewModel: RestaurantViewModel = viewModel()) {
     val viewState by restaurantViewModel.viewState.collectAsState()
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
-        item { Text(text = "Nearest Restaurants", fontSize = 30.sp) }
+        item { Text(text = stringResource(R.string.nearest), fontSize = 30.sp) }
         items(viewState.nearestRestaurants) { restaurant ->
             RestaurantView(
                 remoteRestaurant = restaurant,
@@ -42,7 +43,7 @@ fun RestaurantScreen(restaurantViewModel: RestaurantViewModel = viewModel()) {
                     )
                 })
         }
-        item { Text(text = "Popular Restaurants", fontSize = 30.sp) }
+        item { Text(text = stringResource(R.string.popular), fontSize = 30.sp) }
         items(viewState.popularRestaurants) { restaurant ->
             RestaurantView(
                 remoteRestaurant = restaurant,

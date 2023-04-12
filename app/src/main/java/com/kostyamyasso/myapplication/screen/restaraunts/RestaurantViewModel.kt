@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication.restaraunts
+package com.kostyamyasso.myapplication.screen.restaraunts
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
