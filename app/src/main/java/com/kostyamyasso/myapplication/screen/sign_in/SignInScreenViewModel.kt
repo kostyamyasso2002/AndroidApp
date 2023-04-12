@@ -37,6 +37,7 @@ class SignInScreenViewModel @Inject constructor() : ViewModel() {
                 val prev = _viewState.value.passwordVisible
                 _viewState.value = _viewState.value.copy(passwordVisible = !prev)
             }
+            else -> {throw java.lang.Exception("Unreachable")}
         }
     }
 }
