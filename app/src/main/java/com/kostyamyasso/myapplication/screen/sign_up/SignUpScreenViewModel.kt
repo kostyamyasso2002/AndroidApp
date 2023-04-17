@@ -1,6 +1,7 @@
 package com.kostyamyasso.myapplication.screen.sign_up
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +14,8 @@ sealed class SignUpEvent {
     object ChangePasswordVisibility : SignUpEvent()
     object ChangeKeepSignedIn : SignUpEvent()
     object ChangeEmailAboutPricing : SignUpEvent()
+    object CreateAcc: SignUpEvent()
+    object SignIn: SignUpEvent()
 }
 
 data class SignUpState(
@@ -29,7 +32,7 @@ class SignUpScreenViewModel @Inject constructor(): ViewModel() {
     private val _viewState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
     val viewState: StateFlow<SignUpState> = _viewState
 
-    fun obtainEvent(event: SignUpEvent) {
+    fun obtainEvent(event: SignUpEvent, navController: NavController) {
         when (event) {
             is SignUpEvent.ChangeName -> {
                 _viewState.value = _viewState.value.copy(userName = event.newName)
@@ -55,6 +58,12 @@ class SignUpScreenViewModel @Inject constructor(): ViewModel() {
             SignUpEvent.ChangeEmailAboutPricing -> {
                 val prev = _viewState.value.emailAboutPricing
                 _viewState.value = _viewState.value.copy(emailAboutPricing = !prev)
+            }
+            SignUpEvent.CreateAcc -> {
+                navController.navigate("restaurants")
+            }
+            SignUpEvent.SignIn -> {
+                navController.navigate("sign_in")
             }
         }
     }

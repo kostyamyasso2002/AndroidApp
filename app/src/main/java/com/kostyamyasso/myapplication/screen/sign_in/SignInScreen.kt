@@ -1,4 +1,4 @@
-package com.kostyamyasso.myapplication.sign_in
+package com.kostyamyasso.myapplication.screen.sign_in
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -21,26 +21,30 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.kostyamyasso.myapplication.Logo
 import com.kostyamyasso.myapplication.R
+import com.kostyamyasso.myapplication.sign_in.SignInEvent
+import com.kostyamyasso.myapplication.sign_in.SignInScreenViewModel
+import com.kostyamyasso.myapplication.sign_in.SignInState
 
 
 @Composable
-fun SignInScreen(signInScreenViewModel: SignInScreenViewModel = viewModel()) {
+fun SignInScreen(signInScreenViewModel: SignInScreenViewModel, navController: NavController) {
     val viewState by signInScreenViewModel.viewState.collectAsState()
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Logo()
         Spacer(modifier = Modifier.height(30.dp))
-        LoginView(viewState) {
+        LoginView(viewState, onLogin = { navController.navigate("restaurants") }) {
             signInScreenViewModel.obtainEvent(it)
         }
     }
 }
 
 @Composable
-fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
-
+fun LoginView(viewState: SignInState, onLogin: () -> Unit, obtainEvent: (SignInEvent) -> Unit) = Box(
+    modifier = Modifier.padding(20.dp)
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = stringResource(R.string.login_text),
@@ -54,7 +58,8 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
             onValueChange = { obtainEvent(SignInEvent.ChangeEmail(it)) },
             placeholder = { Text(text = stringResource(R.string.email_placeholder)) },
             label = { Text(text = stringResource(R.string.email_label)) },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth()
         )
 
         OutlinedTextField(
@@ -69,7 +74,8 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
                     )
                 }
             },
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.weight(0.1f))
         val context = LocalContext.current
@@ -78,7 +84,7 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
             Button(
                 onClick = {
                     if (viewState.email.isNotBlank() && viewState.password.isNotBlank()) {
-                        //TODO check
+                        onLogin()
                     } else {
                         Toast.makeText(
                             context,
@@ -103,8 +109,8 @@ fun LoginView(viewState: SignInState, obtainEvent: (SignInEvent) -> Unit) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun LoginPreview() {
-    LoginView(viewState = SignInState(), obtainEvent = {})
+    LoginView(viewState = SignInState(), onLogin = {}, obtainEvent = {})
 }

@@ -18,16 +18,15 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.kostyamyasso.myapplication.R
 import com.kostyamyasso.myapplication.data.RemoteRestaurant
 
 @Composable
-fun RestaurantScreen(restaurantViewModel: RestaurantViewModel = viewModel()) {
+fun RestaurantScreen(restaurantViewModel: RestaurantViewModel, navController: NavController) {
     val viewState by restaurantViewModel.viewState.collectAsState()
 
     LazyColumn(verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -36,11 +35,7 @@ fun RestaurantScreen(restaurantViewModel: RestaurantViewModel = viewModel()) {
             RestaurantView(
                 remoteRestaurant = restaurant,
                 obtainClick = {
-                    restaurantViewModel.obtainEvent(
-                        RestaurantEvent.ChooseNearestRest(
-                            restaurant.id
-                        )
-                    )
+                    navController.navigate("detail/${restaurant.name},${restaurant.deliveryTime}")
                 })
         }
         item { Text(text = stringResource(R.string.popular), fontSize = 30.sp) }
@@ -48,11 +43,7 @@ fun RestaurantScreen(restaurantViewModel: RestaurantViewModel = viewModel()) {
             RestaurantView(
                 remoteRestaurant = restaurant,
                 obtainClick = {
-                    restaurantViewModel.obtainEvent(
-                        RestaurantEvent.ChoosePopularRest(
-                            restaurant.id
-                        )
-                    )
+                    navController.navigate("detail/${restaurant.name},${restaurant.deliveryTime}")
                 })
         }
     }
@@ -81,8 +72,3 @@ fun RestaurantView(remoteRestaurant: RemoteRestaurant, obtainClick: () -> Unit) 
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RestaurantScreenPreview() {
-    RestaurantScreen()
-}

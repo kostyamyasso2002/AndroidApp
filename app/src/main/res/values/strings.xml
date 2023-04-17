@@ -16,4 +16,5 @@
     <string name="agreement_2">Email Me About Special Pricing</string>
     <string name="nearest">Nearest Restaurants</string>
     <string name="popular">Popular Restaurants</string>
+    <string name="have_acc">already have an account?</string>
 </resources>

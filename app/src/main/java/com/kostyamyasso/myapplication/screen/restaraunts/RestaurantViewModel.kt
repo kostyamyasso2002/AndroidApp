@@ -11,8 +11,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class RestaurantEvent {
-    data class ChooseNearestRest(val id: Int) : RestaurantEvent()
-    data class ChoosePopularRest(val id: Int) : RestaurantEvent()
 }
 
 data class RestaurantState(
@@ -59,14 +57,6 @@ class RestaurantViewModel @Inject constructor(
     }
 
     fun obtainEvent(event: RestaurantEvent) {
-        when (event) {
-            is RestaurantEvent.ChooseNearestRest -> {
-                println("Chosen nearest ${event.id}")
-            }
-            is RestaurantEvent.ChoosePopularRest -> {
-                println("Chosen popular ${event.id}")
-
-            }
-        }
+        // Do nothing
     }
 }

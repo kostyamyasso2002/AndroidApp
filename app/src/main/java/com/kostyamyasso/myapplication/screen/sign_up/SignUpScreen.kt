@@ -1,6 +1,7 @@
 package com.kostyamyasso.myapplication.screen.sign_up
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -18,26 +19,26 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.kostyamyasso.myapplication.Logo
 import com.kostyamyasso.myapplication.R
 import com.kostyamyasso.myapplication.ui.theme.AndroidAppTheme
 
 
 @Composable
-fun SignUpScreen(signUpScreenViewModel: SignUpScreenViewModel = viewModel()) {
+fun SignUpScreen(signUpScreenViewModel: SignUpScreenViewModel, navController: NavController) {
     val viewState by signUpScreenViewModel.viewState.collectAsState()
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Logo()
         NewAccView(viewState) {
-            signUpScreenViewModel.obtainEvent(it)
+            signUpScreenViewModel.obtainEvent(it, navController)
         }
     }
 }
 
 @Composable
-fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
+fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) =
 
     Box(modifier = Modifier.padding(20.dp)) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -102,30 +103,40 @@ fun NewAccView(viewState: SignUpState, obtainEvent: (SignUpEvent) -> Unit) {
             val context = LocalContext.current
             val warning = stringResource(R.string.login_warning)
             Box(modifier = Modifier.padding(paddingValues = PaddingValues(bottom = 20.dp))) {
-                Button(
-                    onClick = {
-                        if (viewState.email.isNotBlank() && viewState.password.isNotBlank()) {
-                            //TODO check
-                        } else {
-                            Toast.makeText(
-                                context,
-                                warning,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF53E88B)),
-                    modifier = Modifier
-                        .height(60.dp)
-                        .width(200.dp),
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Text(text = stringResource(R.string.sign_up_button), color = Color.White, fontSize = 18.sp)
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(R.string.have_acc),
+                        modifier = Modifier.clickable { obtainEvent(SignUpEvent.SignIn) })
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Button(
+                        onClick = {
+                            if (viewState.email.isNotBlank() && viewState.password.isNotBlank()) {
+                                obtainEvent(SignUpEvent.CreateAcc)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    warning,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xFF53E88B)),
+                        modifier = Modifier
+                            .height(60.dp)
+                            .width(200.dp),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.sign_up_button),
+                            color = Color.White,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
             }
         }
     }
-}
+
 
 @Preview(showBackground = true)
 @Composable
